@@ -10,6 +10,6 @@ import java.time.Instant;
  */
 public class TimestampMessageDecorator {
     public static void decorate(String message) {
-        System.out.println(Instant.now() + message);
+        System.out.println(Instant.now() + " " + message);
     }
 }
