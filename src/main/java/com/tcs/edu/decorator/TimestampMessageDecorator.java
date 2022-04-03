@@ -9,8 +9,10 @@ import java.time.Instant;
  * @author p.shatskov
  */
 public class TimestampMessageDecorator {
+    public static int messageCount = 1;
+
     public static void decorate(String message) {
         String decoratedMessage = Instant.now() + " " + message;
-        System.out.println(decoratedMessage);
+        System.out.println((messageCount++) + " " + decoratedMessage);
     }
 }
