@@ -17,13 +17,9 @@ public class TimestampMessageDecorator {
      * @author p.shatskov
      */
     public static void decorate(String message) {
-
-        final var output = String.format("%s %s", now(), message);
-
         if(messageCount++ % PAGE_SIZE == 0) {
             System.out.println("---");
         }
-        System.out.println(output);
-
+        System.out.printf("%s %s %s%n", messageCount, now(), message);
     }
 }
