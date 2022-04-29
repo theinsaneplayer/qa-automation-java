@@ -2,7 +2,13 @@ package com.tcs.edu.decorator;
 
 public class SeverityDecorator {
 
-    public static String mapToString(Severity severity) {
+    /**
+     * Класс присваивает уровень значимости
+     * @param severity уровни значимости
+     * @return уровень значимости в зависимости от запроса
+     */
+
+    public static String getSeverityValueByType(Severity severity) {
         String severityString;
         switch (severity) {
             case MINOR:
