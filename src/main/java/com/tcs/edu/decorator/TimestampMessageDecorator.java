@@ -3,7 +3,7 @@ package com.tcs.edu.decorator;
 import static java.time.Instant.*;
 
 /**
- * Класс выводит сообщения с временной отметкой
+ * Класс выводит сообщения с временной отметкой и разделителем чётных строк ---
  * @author p.shatskov
  */
 public class TimestampMessageDecorator {
@@ -16,10 +16,10 @@ public class TimestampMessageDecorator {
      * @param message принимает строку
      * @author p.shatskov
      */
-    public static void decorate(String message) {
+    public static String decorate(String message) {
         if(messageCount++ % PAGE_SIZE == 0) {
             System.out.println("---");
         }
-        System.out.printf("%s %s %s%n", messageCount, now(), message);
+        return String.format("%s %s %s",messageCount, now(), message);
     }
 }

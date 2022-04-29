@@ -1,14 +1,13 @@
 package com.tcs.edu;
 
-import static com.tcs.edu.decorator.TimestampMessageDecorator.decorate;
+import com.tcs.edu.decorator.Severity;
+
+import static com.tcs.edu.printer.MessageService.process;
 
 public class Application {
     public static void main(String[] args) {
-        decorate("Hello world!");
-        decorate("Hello world!");
-        decorate("Hello world!");
-        decorate("Hello world!");
-        decorate("Hello world!");
-        decorate("Hello world!");
+        process(Severity.MINOR, "Hello world!");
+        process(Severity.MAJOR, "Hello world!", "Hello world!");
+        process(Severity.REGULAR, "Hello world!", "Hello world!", "Hello world!");
     }
 }
