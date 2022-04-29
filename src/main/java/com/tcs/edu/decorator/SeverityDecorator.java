@@ -1,9 +1,15 @@
 package com.tcs.edu.decorator;
 
+/**
+ * Класс присваивает уровень значимости
+ * @author p.shatskov
+ */
+
 public class SeverityDecorator {
 
     /**
-     * Класс присваивает уровень значимости
+     * Метод навешивает уровень значимости
+     * @author p.shatskov
      * @param severity уровни значимости
      * @return уровень значимости в зависимости от запроса
      */
