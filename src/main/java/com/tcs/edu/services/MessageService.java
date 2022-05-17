@@ -1,8 +1,7 @@
 package com.tcs.edu.services;
 
+import com.tcs.edu.decorator.MessageOrder;
 import com.tcs.edu.decorator.Severity;
-
-import java.util.Objects;
 
 import static com.tcs.edu.decorator.SeverityDecorator.getSeverityValueByType;
 import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
@@ -21,11 +20,20 @@ public class MessageService {
      * @param Severity,messages Уровень значимости и массив строк сообщений
      * @author p.shatskov
      */
-    public static void process(Severity level, String message, String... messages) {
-        if (Objects.equals(message, messages)) {
-            for (String current : messages) {
-                print(decorate(current) + " " + getSeverityValueByType(level));
+    public static void
+    process(Severity level, MessageOrder order, String... messages) {
+        if (messages != null) {
+            int reverseOrder = messages.length;
+            if (order == MessageOrder.ASC) {
+                for (int i = 0; i < reverseOrder; i++) {
+                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                }
+            } else {
+                for (int i = messages.length - 1; i >= 0; i--) {
+                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                }
             }
         }
     }
+
 }
