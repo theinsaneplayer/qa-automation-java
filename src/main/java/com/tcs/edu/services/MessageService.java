@@ -22,10 +22,15 @@ public class MessageService {
      */
     public static void
     process(Severity level, MessageOrder order, String... messages) {
-        if (messages != null) {
-            int reverseOrder = messages.length;
+        if (order == null) {
+            for (String current : messages) {
+                print(decorate(current) + " " + getSeverityValueByType(level));
+            }
+        }
+        if (order != null) {
+            int Order = messages.length;
             if (order == MessageOrder.ASC) {
-                for (int i = 0; i < reverseOrder; i++) {
+                for (int i = 0; i < Order; i++) {
                     print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
             } else {
@@ -35,5 +40,5 @@ public class MessageService {
             }
         }
     }
-
 }
+

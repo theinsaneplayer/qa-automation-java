@@ -7,7 +7,7 @@ import static com.tcs.edu.services.MessageService.process;
 
 public class Application {
     public static void main(String[] args) {
-        process(MINOR, ASC, "Hello world!", "Hello world!", "Hello world!", "Hello world!");
         process(MINOR, DESC, "Hello world!", "Hello world!", "Hello world!", "Hello world!");
+        //process(MINOR, null, "Hello world!", "Hello world!", "Hello world!", "Hello world!");
     }
 }
