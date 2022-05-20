@@ -1,7 +1,12 @@
 package com.tcs.edu.services;
 
+import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.MessageOrder;
 import com.tcs.edu.decorator.Severity;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import static com.tcs.edu.decorator.SeverityDecorator.getSeverityValueByType;
 import static com.tcs.edu.decorator.TimestampMessageDecorator.*;
@@ -29,11 +34,12 @@ public class MessageService {
                 }
                 return;
             }
-                for (int i = messages.length - 1; i >= 0; i--) {
-                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
-                }
+            for (int i = messages.length - 1; i >= 0; i--) {
+                print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
             }
         }
+    }
+
     public static void process(Severity level, String... messages) {
         if (messages != null) {
             for (String current : messages) {
@@ -41,5 +47,18 @@ public class MessageService {
             }
         }
     }
+
+    public static void process(Severity level, MessageOrder order, Doubling doubling, String... messages) {
+        if (doubling != null && order != null) {
+            if (doubling == Doubling.DISTINCT) {
+                String[] arrayStr = new String[messages.length];
+                Arrays.stream(arrayStr).distinct().forEach(System.out::println);
+                for (String current : messages) {
+                    print(decorate(current) + " " + getSeverityValueByType(level));
+                }
+            }
+        }
+    }
+
 }
 
