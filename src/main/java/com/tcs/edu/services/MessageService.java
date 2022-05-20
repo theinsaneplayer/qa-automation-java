@@ -20,23 +20,24 @@ public class MessageService {
      * @param Severity,messages Уровень значимости и массив строк сообщений
      * @author p.shatskov
      */
-    public static void
-    process(Severity level, MessageOrder order, String... messages) {
-        if (order == null) {
-            for (String current : messages) {
-                print(decorate(current) + " " + getSeverityValueByType(level));
-            }
-        }
+    public static void process(Severity level, MessageOrder order, String... messages) {
         if (order != null) {
             int Order = messages.length;
             if (order == MessageOrder.ASC) {
                 for (int i = 0; i < Order; i++) {
                     print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
-            } else {
+                return;
+            }
                 for (int i = messages.length - 1; i >= 0; i--) {
                     print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
+            }
+        }
+    public static void process(Severity level, String... messages) {
+        if (messages != null) {
+            for (String current : messages) {
+                print(decorate(current) + " " + getSeverityValueByType(level));
             }
         }
     }
