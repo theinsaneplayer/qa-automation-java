@@ -36,14 +36,15 @@ public class MessageService {
                 for (String current : distinctElements) {
                     print(decorate(current) + " " + getSeverityValueByType(level));
                 }
+                String[] uniqueMessages = distinctElements.toArray(new String[0]);
                 if (order == ASC) {
-                    for (int i = 0; i < messages.length; i++) {
-                        print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                    for (int i = 0; i < uniqueMessages.length; i++) {
+                        print(decorate(uniqueMessages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                     }
                     return;
                 }
-                for (int i = messages.length - 1; i >= 0; i--) {
-                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                for (int i = uniqueMessages.length - 1; i >= 0; i--) {
+                    print(decorate(uniqueMessages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
             }
         }
@@ -54,7 +55,6 @@ public class MessageService {
                 print(decorate(current) + " " + getSeverityValueByType(level));
             }
         }
-
     }
 }
 

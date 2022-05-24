@@ -8,7 +8,8 @@ import static com.tcs.edu.services.MessageService.process;
 
 public class Application {
     public static void main(String[] args) {
-        process(MINOR, ASC, DISTINCT, "Hello world!", "Misha", "Misha", "Egor", "Vadim");
+        process(MINOR, ASC, DISTINCT, "Hello world!", "Misha", "Misha", "Egor", "Vadim", "Misha", "Misha",
+                "Misha", "Misha", "Misha", "Misha", "Misha", "Misha", "Misha", "Misha", "Misha", "Misha");
         //process(MINOR, null, "Hello world!", "Hello world!", "Hello world!", "Hello world!");
     }
 }
