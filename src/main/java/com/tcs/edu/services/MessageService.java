@@ -28,33 +28,23 @@ public class MessageService {
      * @author p.shatskov
      */
     public static void process(Severity level, MessageOrder order, Doubling doubling, String... messages) {
-        if (doubling != null && order != null) {
+        if (messages != null) {
+            List<String> filteredElements = List.of(messages);
             if (doubling == DISTINCT) {
-                List<String> distinctElements = Arrays.stream(messages)
-                        .distinct()
-                        .collect(Collectors.toList());
-                if (order == ASC) {
-                    for (int i = 0; i < distinctElements.size(); i++) {
-                        print(decorate(distinctElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
-                    }
-                    return;
-                }
-                for (int i = distinctElements.size() - 1; i >= 0; i--) {
-                    print(decorate(distinctElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
-                }
-                return;
+                filteredElements = filteredElements.stream().distinct().collect(Collectors.toList());
             }
             if (order == ASC) {
-                for (int i = 0; i < messages.length; i++) {
-                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                for (int i = 0; i < filteredElements.size(); i++) {
+                    print(decorate(filteredElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
                 return;
             }
-            for (int i = messages.length - 1; i >= 0; i--) {
-                print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+            for (int i = filteredElements.size() - 1; i >= 0; i--) {
+                print(decorate(filteredElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
             }
         }
     }
+
     public static void process(Severity level, String... messages) {
         if (messages != null) {
             for (String current : messages) {
