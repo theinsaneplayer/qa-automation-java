@@ -22,9 +22,9 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
  */
 public class MessageService {
     /**
-     * Метод склеивает декорировании сообщение и уровень значимости
+     * Метод склеивает декорированные сообщения. Учитывая сортировку, уникальность, уровень важности
      *
-     * @param Severity,messages Уровень значимости и массив строк сообщений
+     * @param level,order,doubling, messages
      * @author p.shatskov
      */
     public static void process(Severity level, MessageOrder order, Doubling doubling, String... messages) {
@@ -33,19 +33,25 @@ public class MessageService {
                 List<String> distinctElements = Arrays.stream(messages)
                         .distinct()
                         .collect(Collectors.toList());
-                for (String current : distinctElements) {
-                    print(decorate(current) + " " + getSeverityValueByType(level));
-                }
-                String[] uniqueMessages = distinctElements.toArray(new String[0]);
                 if (order == ASC) {
-                    for (int i = 0; i < uniqueMessages.length; i++) {
-                        print(decorate(uniqueMessages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                    for (int i = 0; i < distinctElements.size(); i++) {
+                        print(decorate(distinctElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                     }
                     return;
                 }
-                for (int i = uniqueMessages.length - 1; i >= 0; i--) {
-                    print(decorate(uniqueMessages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                for (int i = distinctElements.size() - 1; i >= 0; i--) {
+                    print(decorate(distinctElements.get(i)) + " " + (i + 1) + "!" + getSeverityValueByType(level));
                 }
+                return;
+            }
+            if (order == ASC) {
+                for (int i = 0; i < messages.length; i++) {
+                    print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
+                }
+                return;
+            }
+            for (int i = messages.length - 1; i >= 0; i--) {
+                print(decorate(messages[i]) + " " + (i + 1) + "!" + getSeverityValueByType(level));
             }
         }
     }
