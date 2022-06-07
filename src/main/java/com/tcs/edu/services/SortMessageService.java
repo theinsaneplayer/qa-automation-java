@@ -1,12 +1,16 @@
 package com.tcs.edu.services;
 
-import com.tcs.edu.decorator.*;
+import com.tcs.edu.decorator.Doubling;
+import com.tcs.edu.decorator.MessageDecorator;
+import com.tcs.edu.decorator.MessageOrder;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.printer.Printer;
+import com.tcs.edu.validator.ValidatingService;
+
 
 import static com.tcs.edu.decorator.SeverityDecorator.getSeverityValueByType;
 
-public class SortMessageService implements MessageService {
+public class SortMessageService extends ValidatingService implements MessageService {
     private final Printer printer;
     private final MessageDecorator decorator;
 
@@ -15,43 +19,51 @@ public class SortMessageService implements MessageService {
         this.decorator = decorator;
     }
 
+    @Override
     public void log(MessageOrder messageOrder, Doubling doubling, Message... messages) {
-        if (doubling != null) {
-            if (doubling.equals(Doubling.DOUBLES)) {
-                log(messageOrder, messages);
-            } else if (doubling.equals(Doubling.DISTINCT)) {
-                log(messageOrder, deduplicate(messages));
-            }
+        if (isArgNotValid(doubling)) {
+            return;
+        }
+        if (doubling.equals(Doubling.DOUBLES)) {
+            log(messageOrder, messages);
+        } else if (doubling.equals(Doubling.DISTINCT)) {
+            log(messageOrder, deduplicate(messages));
         }
     }
 
+    @Override
     public void log(MessageOrder messageOrder, Message... messages) {
-        if (messageOrder != null) {
-            if (messageOrder.equals(MessageOrder.ASC)) {
-                log(messages);
-            } else if (messageOrder.equals(MessageOrder.DESC)) {
-                log(reverse(messages));
-            }
+        if (isArgNotValid(messageOrder)) {
+            return;
+        }
+        if (messageOrder.equals(MessageOrder.ASC)) {
+            log(messages);
+        } else if (messageOrder.equals(MessageOrder.DESC)) {
+            log(reverse(messages));
         }
     }
 
+    @Override
     public void log(Message... messages) {
-        if (messages != null && messages.length != 0) {
-            for (Message currentMessage : messages) {
-                if (currentMessage != null) {
-                    printer.print(decorator.decorate(String.format("%s %s", currentMessage.getBody(),
-                            getSeverityValueByType(currentMessage.getSeverity()))));
-                }
+        if (isArgNotValid(messages)) {
+            return;
+        }
+        for (Message currentMessage : messages) {
+            if (isArgNotValid(currentMessage)) {
+                continue;
             }
+            printer.print(decorator.decorate(String.format("%s %s", currentMessage.getBody(),
+                    getSeverityValueByType(currentMessage.getSeverity()))));
         }
     }
 
+    @Override
     public void log(Doubling doubling, Message... messages) {
         log(MessageOrder.ASC, doubling, messages);
     }
 
     /**
-     * @param messages массив сообщений String[]
+     * @param messages массив сообщений
      * @return массив сообщений без дубликатов
      */
     private Message[] deduplicate(Message... messages) {
