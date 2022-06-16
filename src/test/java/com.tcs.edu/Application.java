@@ -6,6 +6,7 @@ import com.tcs.edu.domain.Message;
 import com.tcs.edu.printer.ConsolePrinter;
 import com.tcs.edu.services.MessageService;
 import com.tcs.edu.services.SortMessageService;
+import com.tcs.edu.validator.LogException;
 
 
 import static com.tcs.edu.decorator.Doubling.DISTINCT;
@@ -25,11 +26,11 @@ class Application {
         Message regularMessage = new Message(REGULAR, "REGULAR message");
         Message majorMessage = new Message(MAJOR, "MAJOR message");
         Message messageWithoutSeverity = new Message("сообщение без уровня важности");
-        Message message = new Message("just message");
+        Message messageEmpty = new Message("");
         Message messageError = new Message("данное сообщение не должно печататься");
 
 
-        messageService.log((Doubling) null, messageError);
+        /*messageService.log((Doubling) null, messageError);
         messageService.log(null, (Doubling) null, messageError);
         messageService.log(DISTINCT, null, null, null, null);
         messageService.log(ASC, DOUBLES);
@@ -63,6 +64,84 @@ class Application {
         System.out.println("minorWarning1.hashCode: " + minorWarning1.hashCode());
         System.out.println("minorWarning.hashCode2: " + minorWarning2.hashCode());
         System.out.println("majorWarning.hashCode: " + majorWarning.hashCode());
-        System.out.println("majorError.hashCode: " + majorError.hashCode());
+        System.out.println("majorError.hashCode: " + majorError.hashCode());*/
+
+        {
+            try {
+                messageService.log(null, DOUBLES, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(ASC, (Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log((Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(null, (Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(DISTINCT,null, null, null, null);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(ASC, DOUBLES);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(ASC, DOUBLES, messageWithoutSeverity, messageEmpty);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(ASC);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(DOUBLES);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log();
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(null, DOUBLES, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(ASC, (Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log((Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(null, (Doubling) null, messageError);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+            try {
+                messageService.log(DESC, DISTINCT, null, regularMessage, null, messageWithoutSeverity, null, messageWithoutSeverity, messageWithoutSeverity, null);
+            } catch (LogException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
