@@ -1,5 +1,7 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.domain.Message;
+
 public interface MessageDecorator {
-    String decorate(String message);
+    Message decorate(Message message);
 }

@@ -1,25 +1,20 @@
 package com.tcs.edu;
 
-import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.TimestampMessageDecorator;
 import com.tcs.edu.domain.Message;
-import com.tcs.edu.printer.ConsolePrinter;
+import com.tcs.edu.repository.HashMapMessageRepository;
 import com.tcs.edu.services.MessageService;
 import com.tcs.edu.services.SortMessageService;
-import com.tcs.edu.validator.LogException;
 
-
-import static com.tcs.edu.decorator.Doubling.DISTINCT;
 import static com.tcs.edu.decorator.Doubling.DOUBLES;
 import static com.tcs.edu.decorator.MessageOrder.ASC;
-import static com.tcs.edu.decorator.MessageOrder.DESC;
 import static com.tcs.edu.decorator.Severity.*;
 
 
 class Application {
     public static void main(String[] args) {
         MessageService messageService = new SortMessageService(
-                new ConsolePrinter(),
+                new HashMapMessageRepository(),
                 new TimestampMessageDecorator()
         );
         Message minorMessage = new Message(MINOR, "MINOR message");
@@ -65,8 +60,18 @@ class Application {
         System.out.println("minorWarning.hashCode2: " + minorWarning2.hashCode());
         System.out.println("majorWarning.hashCode: " + majorWarning.hashCode());
         System.out.println("majorError.hashCode: " + majorError.hashCode());*/
+        messageService.log(ASC, DOUBLES, minorMessage, regularMessage, majorMessage, messageWithoutSeverity);
+        System.out.println(messageService.findAll());
+        System.out.println("-----------------------------");
+        System.out.println(messageService.findBySeverity(minorMessage.getSeverity()));
+        System.out.println("-----------------------------");
+        System.out.println(messageService.findBySeverity(majorMessage.getSeverity()));
+        System.out.println("-----------------------------");
+        System.out.println(messageService.findBySeverity(regularMessage.getSeverity()));
+        System.out.println("-----------------------------");
+        System.out.println(messageService.findBySeverity(messageWithoutSeverity.getSeverity()));
 
-        {
+/*        {
             try {
                 messageService.log(null, DOUBLES, messageError);
             } catch (LogException e) {
@@ -142,6 +147,6 @@ class Application {
             } catch (LogException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 }

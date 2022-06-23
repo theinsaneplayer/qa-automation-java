@@ -1,23 +1,39 @@
 package com.tcs.edu.services;
 
-import com.tcs.edu.decorator.Doubling;
-import com.tcs.edu.decorator.MessageDecorator;
-import com.tcs.edu.decorator.MessageOrder;
+import com.tcs.edu.decorator.*;
 import com.tcs.edu.domain.Message;
-import com.tcs.edu.printer.Printer;
+import com.tcs.edu.repository.MessageRepository;
 import com.tcs.edu.validator.LogException;
 import com.tcs.edu.validator.ValidatingService;
 
+import java.util.Collection;
+import java.util.UUID;
 
 import static com.tcs.edu.decorator.SeverityDecorator.getSeverityValueByType;
 
 public class SortMessageService extends ValidatingService implements MessageService {
-    private final Printer printer;
+    private final MessageRepository messageRepository;
     private final MessageDecorator decorator;
+    private final SeverityDecorator levelMapper = new SeverityDecorator();
 
-    public SortMessageService(Printer printer, MessageDecorator decorator) {
-        this.printer = printer;
+    public SortMessageService(MessageRepository messageRepository, MessageDecorator decorator) {
+        this.messageRepository = messageRepository;
         this.decorator = decorator;
+    }
+
+    @Override
+    public Message findByPrimaryKey(UUID key) {
+        return messageRepository.findByPrimaryKey(key);
+    }
+
+    @Override
+    public Collection<Message> findAll() {
+        return messageRepository.findAll();
+    }
+
+    @Override
+    public Collection<Message> findBySeverity(Severity severity) {
+        return messageRepository.findBySeverity(severity);
     }
 
     @Override
@@ -25,13 +41,13 @@ public class SortMessageService extends ValidatingService implements MessageServ
             throws LogException {
         try {
             super.isArgValid(doubling);
+            if (doubling.equals(Doubling.DOUBLES)) {
+                log(messageOrder, messages);
+            } else if (doubling.equals(Doubling.DISTINCT)) {
+                log(messageOrder, deduplicate(messages));
+            }
         } catch (IllegalArgumentException e) {
             throw new LogException("notValidArgMessage", e);
-        }
-        if (doubling.equals(Doubling.DOUBLES)) {
-            log(messageOrder, messages);
-        } else if (doubling.equals(Doubling.DISTINCT)) {
-            log(messageOrder, deduplicate(messages));
         }
     }
 
@@ -39,13 +55,13 @@ public class SortMessageService extends ValidatingService implements MessageServ
     public void log(MessageOrder messageOrder, Message... messages) {
         try {
             super.isArgValid(messageOrder);
+            if (messageOrder.equals(MessageOrder.ASC)) {
+                log(messages);
+            } else if (messageOrder.equals(MessageOrder.DESC)) {
+                log(reverse(messages));
+            }
         } catch (IllegalArgumentException e) {
             throw new LogException("notValidArgMessage", e);
-        }
-        if (messageOrder.equals(MessageOrder.ASC)) {
-            log(messages);
-        } else if (messageOrder.equals(MessageOrder.DESC)) {
-            log(reverse(messages));
         }
     }
 
@@ -53,19 +69,14 @@ public class SortMessageService extends ValidatingService implements MessageServ
     public void log(Message... messages) {
         try {
             super.isArgValid(messages);
-        } catch (IllegalArgumentException e) {
-            throw new LogException("notValidArgMessage", e);
-        }
-        for (Message currentMessage : messages) {
-            try {
+            for (Message currentMessage : messages) {
                 super.isArgValid(currentMessage);
-            } catch (IllegalArgumentException e) {
-                throw new LogException("notValidArgMessage", e);
+                currentMessage.setBody(String.format("%s %s", currentMessage.getBody(),
+                        getSeverityValueByType(currentMessage.getSeverity())));
+                messageRepository.create(decorator.decorate(currentMessage));
             }
-        }
-        for (Message currentMessage : messages) {
-            printer.print(decorator.decorate(String.format("%s %s", currentMessage.getBody(),
-                    getSeverityValueByType(currentMessage.getSeverity()))));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new LogException("notValidArgMessage", e);
         }
     }
 

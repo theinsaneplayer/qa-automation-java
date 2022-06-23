@@ -3,12 +3,14 @@ package com.tcs.edu.domain;
 import com.tcs.edu.decorator.Severity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Класс хранит конструкторы для объектов
  * @author p.shatskov
  */
 public class Message {
+    UUID id;
     String body;
     Severity severity;
 
@@ -25,14 +27,31 @@ public class Message {
         return body;
     }
 
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
+
     public Severity getSeverity() {
         return severity;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "body='" + body + '\'' +
+                "id=" + id +
+                ", body='" + body + '\'' +
                 ", severity=" + severity +
                 '}';
     }
@@ -42,12 +61,11 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return Objects.equals(body, message.body) && severity == message.severity;
+        return Objects.equals(id, message.id) && Objects.equals(body, message.body) && severity == message.severity;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(body, severity);
+        return Objects.hash(id, body, severity);
     }
-
 }
