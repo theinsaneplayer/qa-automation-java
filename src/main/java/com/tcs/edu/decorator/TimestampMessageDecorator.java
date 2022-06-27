@@ -1,6 +1,9 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.domain.Message;
+
+import java.time.Instant;
+
 import static java.time.Instant.*;
 
 /**
@@ -17,10 +20,11 @@ public class TimestampMessageDecorator implements MessageDecorator {
      * @param message принимает строку
      * @author p.shatskov
      */
+    @Override
     public Message decorate(Message message) {
-        var decoratedMessage = String.format("%s %s %s",messageCount, now(), message.getBody());
-        if(messageCount++ % PAGE_SIZE == 0) {
-            System.out.println("---");
+        var decoratedMessage = String.format("%s %s %s", messageCount, Instant.now(), message.getBody());
+        if (messageCount % PAGE_SIZE == 0) {
+            decoratedMessage = String.format("%s %s", decoratedMessage, "\n---");
         }
         message.setBody(decoratedMessage);
         return message;
