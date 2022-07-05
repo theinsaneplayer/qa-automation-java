@@ -62,13 +62,9 @@ class Application {
         System.out.println("majorError.hashCode: " + majorError.hashCode());*/
         messageService.log(ASC, DOUBLES, minorMessage, regularMessage, majorMessage, messageWithoutSeverity);
         System.out.println(messageService.findAll());
-        System.out.println("-----------------------------");
         System.out.println(messageService.findBySeverity(minorMessage.getSeverity()));
-        System.out.println("-----------------------------");
         System.out.println(messageService.findBySeverity(majorMessage.getSeverity()));
-        System.out.println("-----------------------------");
         System.out.println(messageService.findBySeverity(regularMessage.getSeverity()));
-        System.out.println("-----------------------------");
         System.out.println(messageService.findBySeverity(messageWithoutSeverity.getSeverity()));
 
 /*        {

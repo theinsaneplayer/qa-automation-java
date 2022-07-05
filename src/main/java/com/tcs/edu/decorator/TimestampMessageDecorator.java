@@ -22,9 +22,9 @@ public class TimestampMessageDecorator implements MessageDecorator {
      */
     @Override
     public Message decorate(Message message) {
-        var decoratedMessage = String.format("%s %s %s", messageCount, Instant.now(), message.getBody());
-        if (messageCount % PAGE_SIZE == 0) {
-            decoratedMessage = String.format("%s %s", decoratedMessage, "\n---");
+        var decoratedMessage = String.format("%s %s %s",messageCount, now(), message);
+        if(messageCount++ % PAGE_SIZE == 0) {
+            System.out.printf("%s %s %s %s%n",messageCount, now(), decoratedMessage, "\n--------------");
         }
         message.setBody(decoratedMessage);
         return message;
