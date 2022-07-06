@@ -16,15 +16,16 @@ public class TimestampMessageDecorator implements MessageDecorator {
 
     /**
      * Метод берёт текущаю дату и время, соединяя их с заданным сообщением.
-     * Добавлен счётчик на каждый вывод.
-     * @param message принимает строку
+     * На каждый вывод установлен счётчик.
+     * @param Message - объект хранящий конструкторы
      * @author p.shatskov
      */
     @Override
     public Message decorate(Message message) {
         var decoratedMessage = String.format("%s %s %s",messageCount, now(), message);
+        System.out.printf("%s %s%n", decoratedMessage, "\n");
         if(messageCount++ % PAGE_SIZE == 0) {
-            System.out.printf("%s %s %s %s%n",messageCount, now(), decoratedMessage, "\n--------------");
+            System.out.println("----------------");
         }
         message.setBody(decoratedMessage);
         return message;
