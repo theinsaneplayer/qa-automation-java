@@ -11,7 +11,7 @@ import static java.time.Instant.*;
  * @author p.shatskov
  */
 public class TimestampMessageDecorator implements MessageDecorator {
-    public static int messageCount = 0;
+    public static int messageCount = 1;
     public static final int PAGE_SIZE = 2;
 
     /**
