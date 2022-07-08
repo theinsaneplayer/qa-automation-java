@@ -71,9 +71,7 @@ public class SortMessageService extends ValidatingService implements MessageServ
             super.isArgValid(messages);
             for (Message currentMessage : messages) {
                 super.isArgValid(currentMessage);
-                currentMessage.setBody(String.format("%s %s", currentMessage.getBody(),
-                        levelMapper.getSeverityValueByType(currentMessage.getSeverity())));
-                messageRepository.create(decorator.decorate(currentMessage));
+                messageRepository.create(currentMessage);
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new LogException("notValidArgMessage", e);
