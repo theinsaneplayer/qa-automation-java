@@ -89,17 +89,20 @@ public class SortMessageService extends ValidatingService implements MessageServ
      */
     private Message[] deduplicate(Message... messages) {
         Message[] messagesOutput = new Message[messages.length];
+        int k = 0;
         if (messages.length != 0) {
             messagesOutput[0] = messages[0];
-            int j = 1;
+            k = 1;
             for (int i = 1; i < messages.length; i++) {
                 if (!checkContains(messages[i], messagesOutput)) {
-                    messagesOutput[j] = messages[i];
-                    j++;
+                    messagesOutput[k] = messages[i];
+                    k++;
                 }
             }
         }
-        return messagesOutput;
+        Message[] messagesFinalOutput = new Message[k];
+        System.arraycopy(messagesOutput, 0, messagesFinalOutput, 0, k);
+        return messagesFinalOutput;
     }
 
     /**

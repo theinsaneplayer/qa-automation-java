@@ -6,6 +6,7 @@ import com.tcs.edu.decorator.TimestampMessageDecorator;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.repository.HashMapMessageRepository;
 import com.tcs.edu.services.MessageService;
+import com.tcs.edu.services.SortMessageService;
 import com.tcs.edu.validator.LogException;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +19,7 @@ import static com.tcs.edu.decorator.Doubling.DOUBLES;
 import static com.tcs.edu.decorator.MessageOrder.ASC;
 import static com.tcs.edu.decorator.MessageOrder.DESC;
 import static com.tcs.edu.decorator.Severity.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SortMessageServiceTests {
@@ -26,7 +28,7 @@ public class SortMessageServiceTests {
 
     @BeforeAll
     static void precondition() {
-        messageService = new com.tcs.edu.services.SortMessageService(new HashMapMessageRepository(), new TimestampMessageDecorator());
+        messageService = new SortMessageService(new HashMapMessageRepository(), new TimestampMessageDecorator());
     }
 
     @Test
@@ -132,16 +134,7 @@ public class SortMessageServiceTests {
         int sizeBefore = messageService.findAll().size();
         messageService.log(ASC, DISTINCT, messageMin, messageReg);
         int sizeAfter = messageService.findAll().size();
-        assertEquals(sizeBefore + 1, sizeAfter);
-        if (messageMin.getId() != null) {
-            assertNull(messageReg.getId(),
-                    "При дедубликации двух сообщений id должен сгенерироваться у одного и только одного сообщения");
-            checkMessageById(messageService, messageMin);
-        } else {
-            assertNotNull(messageReg.getId(),
-                    "При дедубликации двух сообщений id должен сгенерироваться у одного и только одного сообщения");
-            checkMessageById(messageService, messageReg);
-        }
+        assertThat(sizeAfter).isEqualTo(sizeBefore + 1);
     }
 
     @Test
